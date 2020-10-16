@@ -1,0 +1,10 @@
+---
+- name: create a user with caulted cariables
+  hosts: ansible1
+  vars_files:
+    - /home/ansible/chapter6/secrets.yaml
+  tasks: 
+  - name: creating user
+    user:
+      name: "{{ username }}"
+      password: "{{ pwhash }}"

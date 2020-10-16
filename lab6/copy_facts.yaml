@@ -1,0 +1,21 @@
+---
+- name: This playnook copies the facts file to managed servers
+  hosts: all
+  become: yes
+  vars: 
+    remote_dir: "/etc/ansible/facts.d"
+  tasks:
+  - name: Create remote directory
+    file:
+      path: /etc/ansible/facts.d/
+      state: directory
+      recurse: yes
+  - name: copy facts file to managed hosts
+    copy:
+      src: /home/ansible/lab6/packages.fact
+      dest: "{{ remote_dir }}"
+  - name:
+    copy:
+      src: /home/ansible/lab6/services.fact
+      dest: "{{ remote_dir }}"
+

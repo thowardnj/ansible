@@ -1,0 +1,45 @@
+---
+- name: This playbook is for Lab 6-2
+  hosts: lamp
+#  become: yes
+  vars_files: vars/allvars.yaml
+  tasks:
+  - name: Install the webserver
+    yum:
+      name: "{{ ansible_facts['ansible_local']['lab6']['packages']['web_package'] }}"
+  - name: Create the index file
+    copy:
+      dest: "/var/www/html/index.html"
+      content: "Welcome to the Ansible Web Server"
+  - name: Open the firewall port
+    firewalld:
+      service: http
+      permanent: yes
+      state: enabled
+      immediate: yes
+  - name: Start and enable the webserver
+    service:
+      name: "{{ ansible_facts['ansible_local']['lab6']['services']['web_service'] }}"
+      state: started
+      enabled: yes
+
+-  name: This playbook is for Lab 6-2
+   hosts: file
+   become: yes
+   vars_files: vars/allvars.yaml
+   tasks:
+   - name: Install the vsftp server
+     yum:
+       name: "{{ ansible_facts['ansible_local']['lab6']['packages']['ftp_package'] }}"
+   - name: Open the firewall port
+     firewalld:
+       service: ftp
+       permanent: yes
+       state: enabled
+       immediate: yes
+   - name: Start and enable ftp server
+     service:
+       name: "{{ ansible_facts['ansible_local']['lab6']['services']['ftp_service'] }}"
+       state: started
+       enabled: yes
+
