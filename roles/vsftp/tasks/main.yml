@@ -1,0 +1,27 @@
+---
+# tasks file for roles/vsftp
+  - name: Install vsftpd
+    yum:
+      name: vsftpd
+      state: latest
+  - name: Open firewall port
+    firewalld:
+      service: ftp
+      state: enabled
+      immediate: yes
+  - name: Start and enable vsftpd service
+    service:
+      name: vsftpd
+      state: started
+      enabled: yes
+  - name: Set permissions on /var/ftp/pub directory
+    file:                                             
+      path: /var/ftp/pub                              
+      mode: 0777                                      
+      state: directory                                
+  - name: Copy custom vsftpd config
+    template:
+      src: vsftpd.j2
+      dest: /etc/vsftpd/vsftpd.conf
+    notify:
+     - restart_vsftpd

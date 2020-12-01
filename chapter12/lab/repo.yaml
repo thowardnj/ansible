@@ -1,0 +1,11 @@
+---
+- name: fix repo selinux
+  hosts: localhost
+  tasks: 
+  - name: fix context on new doc root
+    sefcontext:
+      target: '/repo(/.*)?'
+      setype: httpd_sys_rw_content_t
+      state: present
+  - name: run restorecon
+    command: restorecon -Rv /repo

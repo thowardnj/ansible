@@ -1,0 +1,11 @@
+---
+- name: This is the lab 7-1 playbook
+  hosts: ansible2
+  vars_files: vars/lab71
+  tasks: 
+  - name: Install the webserver
+    yum:
+      name: "{{ item.name }}"
+      state: "{{ item.state }}"
+    loop: "{{ packages }}"
+    when: ansible_distribution == "CentOS" or ansible_distribution == "CentOS" and ansible_distribution != "Fedora"

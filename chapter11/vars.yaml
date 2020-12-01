@@ -1,0 +1,3 @@
+package:  httpd
+service:  httpd
+message:  'warning: authorized use only'

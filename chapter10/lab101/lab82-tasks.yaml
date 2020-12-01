@@ -1,0 +1,21 @@
+- name: get basic vsftpd operational
+  yum:
+    name: "{{ package }}"
+    state: installed
+- name: start and enable vsftpd
+  service:
+    name: "{{ service }}" 
+    enabled: yes
+    state: started
+- name: open port in firewall
+  firewalld:
+    service: "{{ firewalld_service }}"
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: use template to copy FTP config
+  template:
+    src: lab82.j2
+    dest: /etc/vsftpd/vsftpd.conf
+

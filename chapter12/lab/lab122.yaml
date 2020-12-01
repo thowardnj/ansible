@@ -1,0 +1,24 @@
+---
+- name: Set up new repository and install ngnix
+  hosts: all
+  vars:
+    package: nginx 
+  tasks:
+  - name: Add repository
+    yum_repository:
+      name: control_repo
+      description: Control node repository
+      baseurl: http://control
+      gpgcheck: no
+  - name: install nginx
+    yum:
+      name: "{{ package }}"
+      state: latest
+  - name: update package facts
+    package_facts:
+      manager: auto
+  - name: show package facts for {{ package  }}
+    debug:
+      var: ansible_facts.packages[package]
+    when: package in ansible_facts.packages
+

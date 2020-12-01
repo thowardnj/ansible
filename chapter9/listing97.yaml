@@ -1,0 +1,10 @@
+---
+- hosts: all
+  vars:
+    selinux_policy: targeted
+    selinus_state: enforcing
+    selinux_booleans:
+      - { name: 'samba_enable_home_dirs', state: 'on' }
+      - { name: 'ssh_sysadmin_login', state: 'on', persistent: 'yes' }
+    selinux_fcontexts:
+      - { target: '/tmp/test_dir(/.*)?', setyope: 

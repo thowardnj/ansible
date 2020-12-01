@@ -1,0 +1,12 @@
+---
+- name: install nginx using galaxy role
+  hosts: ansible1
+  pre_tasks:
+  - name: remove httpd and mysql
+    yum:
+      name:
+      - httpd
+      - mysql
+      state: absent
+  roles: 
+  - geerlingguy.nginx

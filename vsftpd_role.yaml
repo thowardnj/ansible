@@ -1,0 +1,19 @@
+---
+- hosts: ansible1
+  vars:
+    selinux_policy: targeted
+    selinux_state: enforcing
+    selinux_booleans:
+      - { name: 'ftpd_anon_write', state: 'on' }
+    selinux_fcontexts:
+      - { target: '/var/ftp/pub(/.*)?', setype: 'public_content_rw_t', ftype: 'd' }
+    selinux_restore_dirs:
+      - /var/ftp/pub
+  pre_tasks:
+    - name: install policycoreuitls package to mangage selinux
+      yum:
+        name: policycoreutils-python-utils
+        state: installed
+  roles: 
+    - role: vsftp
+    - role: rhel-system-roles.selinux

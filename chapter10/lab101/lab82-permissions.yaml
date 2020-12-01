@@ -1,0 +1,27 @@
+- name: configure vsftpd permissions and selinux
+  hosts: all
+  serial: 2
+  tasks:
+  - name: install required selinux tools
+    yum:
+      name: policycoreutils-python-utils
+      state: present
+  - name: set permissions
+    file:
+      path: /var/ftp/pub
+      mode: '0777'
+  - name: set selinux boolean
+    seboolean:
+      name: ftpd_anon_write
+      state: yes
+      persistent: yes
+  - name: manage selinux settings
+    sefcontext:
+      target: /var/ftp/pub
+      setype: public_content_rw_t
+      state: present
+    notify:
+      - run restorecon
+  handlers:
+  - name: run restorecon
+    command: restorecon -vR /var/ftp/pub

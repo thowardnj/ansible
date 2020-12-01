@@ -1,0 +1,10 @@
+---
+- name: install vsftpd
+  serial: 2
+  hosts: all
+  tasks:
+  - include_vars: lab82-vars.yaml
+  - name: get basic vsftpd operational
+    include_tasks: lab82-tasks.yaml
+- name: configure vsftpd permissions and selinux
+  import_playbook: lab82-permissions.yaml

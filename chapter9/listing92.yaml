@@ -1,0 +1,6 @@
+---
+- name: incluse some roles
+  roles:
+  - role1
+  - role2
+

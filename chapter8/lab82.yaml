@@ -1,0 +1,57 @@
+---
+- name: This playbook will perform the tasks required to complete lab 8-2
+  hosts: ansible2
+  tasks:
+  - name: Install vsftpd
+    yum:
+      name: vsftpd
+      state: latest
+  - name: Open firewall port for vfstpd
+    firewalld:
+      service: ftp
+      state: enabled
+      permanent: yes
+      immediate: yes
+  - name: Start and enable the vsftpd service
+    service:
+      name: vsftpd
+      state: started
+      enabled: yes
+
+- name: Set custom VSFTPD configuration
+  vars:
+    anonymous_enable: 'yes'
+    local_enable: 'yes'
+    write_enable: 'yes'
+    anon_upload_enable: 'yes'
+  hosts: ansible2
+  tasks:
+  - name: install policycoreuitls package to mangage selinux
+    yum:
+      name: policycoreutils-python-utils
+      state: installed
+  - name: update vsftpd config
+    template:
+      src: vsftpd.j2
+      dest: /etc/vsftpd/vsftpd.conf
+  - name: Change permissions on /var/ftp/pub
+    file:
+      path: /var/ftp/pub
+      state: directory
+      mode: '0777'
+  - name: Use sefcontext to set context to public on ftp pub directory
+    sefcontext:
+      target: '/var/ftp/pub(/.*)?'
+      setype: public_content_rw_t
+      state: present
+  - name: Run restorecon
+    command: restorecon -Rv /var/ftp/pub
+  - name: Set selinux boolean
+    seboolean:
+      name: ftpd_anon_write
+      state: yes
+      persistent: yes
+  - name: restart vsftpd
+    service:
+      name: vsftpd
+      state: restarted

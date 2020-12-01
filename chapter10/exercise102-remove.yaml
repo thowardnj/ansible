@@ -1,0 +1,13 @@
+---
+- name: install and enable apache web server
+  hosts: all
+  tasks:
+  - name: Stop and disable the httpd service
+    service: 
+      name: httpd
+      state: stopped
+      enabled: yes
+  - name: Remove httpd
+    yum:
+      name: httpd
+      state: absent

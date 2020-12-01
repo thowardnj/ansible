@@ -1,0 +1,23 @@
+---
+- hosts: ansible2
+  become: true
+  become_method: sudo
+  become_user: root
+  vars:
+    selinux_policy: targeted
+    selinux_state: enforcing
+    selinux_booleans:
+      - { name: 'cron_can_relabel', state: 'on' }
+    selinux_fcontexts:
+      - { target: '/var/ftp/uploads(/.*)?', setype: 'public_content_rw_t', ftype: 'd' }
+    selinux_restore_dirs:
+      - /var/ftp/uploads
+    selinux_ports:
+      - { ports: '82', proto: 'tcp', setype: 'http_port_t', state: 'present' }
+  pre_tasks:
+    - name: Creates directory
+      file:
+        path: /var/ftp/uploads
+        state: directory
+  roles: 
+    - role: rhel-system-roles.selinux

@@ -1,0 +1,17 @@
+---
+- name: using asser to check is volume gropu vgdata exists
+  hosts: all
+  tasks:
+  - name: check if vgdata exists
+    command: vgs vgdata
+    register: vg_result
+    ignore_errors: true
+  - name: show vg_result
+    debug:
+      var: vg_result
+  - name: print a message
+    assert:
+      that:
+      - vg_result.rc == 0
+      fail_msg: volume group not found
+      success_msg: volume grop was found
