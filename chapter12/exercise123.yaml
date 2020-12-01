@@ -28,7 +28,7 @@
       append: yes
       state: present
   - name: set a password for this user
-    shell: 'echo steech29 | passwd --stdin ansible'
+    shell: 'echo password | passwd --stdin ansible'
   - name: enable sudo without passwords
     lineinfile:
       path: /etc/sudoers
