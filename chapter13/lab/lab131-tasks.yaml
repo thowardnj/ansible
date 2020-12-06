@@ -1,0 +1,12 @@
+- name: create groups
+  group:
+    name: "{{ item.groups }}"
+    state: present
+  loop: "{{ users }}"
+- name: create users
+  user:
+    name: "{{ item.username }}"
+    group: "{{ item.groups }}"
+    generate_ssh_key: yes
+    password: $6$mysecretsalt$MIJffjeQyfrKKrGkprGrDL/g2mCJa53koLmYQuuLmY9y37pDvGKPXU1Ov3RbMi.tpQ9cWvxAzUVtBLe7KrZoU.
+  loop: "{{ users }}"

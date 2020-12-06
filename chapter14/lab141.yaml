@@ -1,0 +1,25 @@
+---
+- name: Lab 14-1
+  hosts: all
+  tasks:
+  - name: Create cron job to restart servers at 2AM
+    cron:
+      name: restart_servers
+      weekday: "1-5"
+      minute: "0"
+      hour: "2"
+      job: "reboot"
+  - name: Create cron job to write to syslog on reboot
+    cron:
+      name: logger
+      special_time: reboot
+      job: "logger CRON initiated reboot just completed"
+  - name: Set default systemd target to multi-user.target
+    command: systemctl set-default multi-user.target 
+  - name: run  the service facts module
+    service_facts:
+  - name: Get info on the cron process
+    debug:
+      var: ansible_facts.services['crond.service']
+
+

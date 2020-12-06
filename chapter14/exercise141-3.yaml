@@ -1,0 +1,8 @@
+---
+- name: run a cronjob
+  hosts: ansible2
+  tasks:
+  - name: run a cron job
+    cron:
+      name: "run logger"
+      state: absent

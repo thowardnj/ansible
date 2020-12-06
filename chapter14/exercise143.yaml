@@ -1,0 +1,24 @@
+---
+- name: exercise 143
+  hosts: ansible2
+  tasks: 
+  - name: add a line to file before rebooting
+    lineinfile:
+      create: true
+      state: present
+      path: /tmp/rebooted
+      insertafter: EOF
+      line: rebooted at {{ ansible_facts['date_time']['time'] }}:{{ ansible_facts.date_time.second }}
+  - name: rum a cronjob at reboot
+    cron: 
+      name: "run on reboot"
+      state: present
+      special_time: reboot
+      job: "echo rebooted at $(date) >> /tmp/rebooted"
+  - name: reboot managed host
+    reboot:
+      msg: Reboot initiated by Ansible
+      test_command: whoami 
+  - name: Show reboot success
+    debug:
+      msg: just rebooted successfully

@@ -1,0 +1,10 @@
+---
+users:
+    - username: kim
+      groups: profs
+    - username: kelly
+      groups: profs
+    - username: christina
+      groups: students
+    - username: bill
+      groups: students

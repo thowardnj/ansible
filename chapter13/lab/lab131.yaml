@@ -1,0 +1,11 @@
+---
+- name: create local users
+  hosts: localhost
+  vars_file:
+  - lab131-vars.yaml
+  tasks:
+  - name: include user and group setup
+    import_tasks: lab131-tasks.yaml
+  - name: create folders to copy ssh keys
+    shell: 'cat /home/{{ item.username }}/.ssh/id_rsa.pub > {{ item.username }}/id_rsa.pub'
+    loop: "{{ users }}"

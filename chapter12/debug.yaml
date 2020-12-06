@@ -1,0 +1,6 @@
+---
+- name: test ansible facts
+  hosts: ansible1
+  tasks:
+  - debug: 
+      msg: "{{ ansible_facts['mounts'] }}"
